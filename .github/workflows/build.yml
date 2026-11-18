@@ -102,7 +102,3 @@ jobs:
           name: ${{ env.KERNEL_DEVICE }}-final-kernel
           path: AnyKernel3/${{ env.KERNEL_DEVICE }}-final-kernel.zip
           retention-days: 7
-        with:
-          name: ${{ env.KERNEL_DEVICE }}-final-kernel
-          path: AnyKernel3/${{ env.KERNEL_DEVICE }}-final-kernel.zip
-          retention-days: 7
