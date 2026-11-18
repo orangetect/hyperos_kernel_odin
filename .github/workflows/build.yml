@@ -94,17 +94,17 @@ jobs:
           path: ${{ env.KERNEL_NAME }}/build.log
           retention-days: 7
 
-      - name: Upload Kernel Image.gz-dtb
+      - name: Upload Kernel Image
         uses: actions/upload-artifact@v4
         with:
-          name: Image.gz-dtb-${{ env.KERNEL_DEVICE }}
-          path: ${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image.gz-dtb
+          name: Image-${{ env.KERNEL_DEVICE }}
+          path: ${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image
           retention-days: 7
 
       - name: Pack AnyKernel3 Flashable Zip
         if: ${{ env.USE_ANYKERNEL3 == true }}
         run: |
-          cp -f ${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image.gz-dtb ./AnyKernel3/
+          cp -f ${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image ./AnyKernel3/
           cd AnyKernel3
           zip -r ${{ env.KERNEL_DEVICE }}-final-kernel.zip *
 
