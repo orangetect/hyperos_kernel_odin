@@ -17,7 +17,6 @@ jobs:
       KERNEL_BRANCH: main
       KERNEL_NAME: xiaomi_odin
       KERNEL_DEVICE: odin
-      DEFCONFIG: lahaina_odin_defconfig
 
       WITH_KERNELSU: true
       USE_ANYKERNEL3: true
@@ -48,10 +47,26 @@ jobs:
           rm -rf KernelSU drivers/kernelsu
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
 
+      - name: Auto Find and Set Defconfig
+        working-directory: ${{ env.KERNEL_NAME }}
+        run: |
+          echo "Searching for odin defconfig in arch/arm64/configs/..."
+          CONFIG_FILE=$(find arch/arm64/configs -name "*odin*" -exec basename {} \; | head -n 1)
+          
+          if [ -z "$CONFIG_FILE" ]; then
+            echo "Error: No config file found matching *odin*!"
+            exit 1
+          fi
+          
+          echo "Found config file: $CONFIG_FILE"
+          # 去掉 .defconfig 后缀作为 make 参数
+          DEFCONFIG_NAME="${CONFIG_FILE%.defconfig}"
+          echo "DEFCONFIG_NAME=$DEFCONFIG_NAME" >> $GITHUB_ENV
+
       - name: Generate Original Defconfig
         working-directory: ${{ env.KERNEL_NAME }}
         run: |
-          make O=${{ env.OUT_DIR }} ARCH=${{ env.ARCH }} LLVM=1 LLVM_IAS=1 ${{ env.DEFCONFIG }}
+          make O=${{ env.OUT_DIR }} ARCH=${{ env.ARCH }} LLVM=1 LLVM_IAS=1 ${{ env.DEFCONFIG_NAME }}_defconfig
 
       - name: Android 16 / Android 17 Compatible Fix
         working-directory: ${{ env.KERNEL_NAME }}
