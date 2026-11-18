@@ -59,14 +59,12 @@ jobs:
           fi
           
           echo "Found config file: $CONFIG_FILE"
-          # 去掉 .defconfig 后缀作为 make 参数
-          DEFCONFIG_NAME="${CONFIG_FILE%.defconfig}"
-          echo "DEFCONFIG_NAME=$DEFCONFIG_NAME" >> $GITHUB_ENV
+          echo "DEFCONFIG_TARGET=$CONFIG_FILE" >> $GITHUB_ENV
 
       - name: Generate Original Defconfig
         working-directory: ${{ env.KERNEL_NAME }}
         run: |
-          make O=${{ env.OUT_DIR }} ARCH=${{ env.ARCH }} LLVM=1 LLVM_IAS=1 ${{ env.DEFCONFIG_NAME }}_defconfig
+          make O=${{ env.OUT_DIR }} ARCH=${{ env.ARCH }} LLVM=1 LLVM_IAS=1 ${{ env.DEFCONFIG_TARGET }}
 
       - name: Android 16 / Android 17 Compatible Fix
         working-directory: ${{ env.KERNEL_NAME }}
