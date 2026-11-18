@@ -20,7 +20,9 @@
 #include "klog.h" // IWYU pragma: keep
 #include "ksud.h"
 #include "kernel_compat.h"
-
+#ifndef ksu_strncpy_from_user_nofault
+#define ksu_strncpy_from_user_nofault(dst, src, len) strncpy_from_user(dst, src, len)
+#endif
 #define SU_PATH "/system/bin/su"
 #define SH_PATH "/system/bin/sh"
 
